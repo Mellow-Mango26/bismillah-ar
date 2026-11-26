@@ -1,0 +1,195 @@
+<title>Bismillah Wall Piece</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Work+Sans:wght@400;500;600&display=swap">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js" integrity="sha384-Ftcjj/GNLxPvzNDftO/oryXB9aGxsGZY9JGqsXG0uUKgQDl9RfDgsx9NJ/4IVNPe" crossorigin="anonymous"></script>
+<style>
+  /* Layout: a product page for one metal wall piece. A plaster "wall" stage holds the 3D model (always light, like the
+     real wall it hangs on); controls for size and finish sit beside it on wide screens and below it on phones. */
+  :root {
+    --bg: #f6f3ee;
+    --surface: #ffffff;
+    --fg: #1d1a17;
+    --muted: #5c554d;
+    --line: #e2dbd1;
+    --accent: #8a6a3b;          /* brass */
+    --accent-fg: #ffffff;
+    --wall-a: #ebe4d9;           /* the stage stays plaster in both themes */
+    --wall-b: #d9d0c3;
+    --focus: #8a6a3b;
+    --font-display: "Marcellus", "Iowan Old Style", Georgia, serif;
+    --font-body: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #171513; --surface: #211e1b; --fg: #efe9e1; --muted: #a79e93; --line: #36312b;
+      --accent: #c9a36a; --accent-fg: #1d1a17; --focus: #c9a36a; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #171513; --surface: #211e1b; --fg: #efe9e1; --muted: #a79e93; --line: #36312b;
+    --accent: #c9a36a; --accent-fg: #1d1a17; --focus: #c9a36a; color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 24px 40px;
+  }
+  .page { max-width: 1180px; margin: 0 auto; display: grid; gap: 28px; }
+  header { display: grid; gap: 6px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 42px); line-height: 1.1;
+       margin: 0; text-wrap: balance; }
+  .arabic { font-family: "Amiri", "Geeza Pro", "Noto Naskh Arabic", serif; color: var(--muted); font-size: 18px; margin: 0; }
+
+  .product { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+  @media (max-width: 860px) { .product { grid-template-columns: minmax(0, 1fr); } }
+
+  .stage { position: relative; border-radius: 6px; overflow: hidden;
+           background: radial-gradient(120% 90% at 50% 30%, var(--wall-a), var(--wall-b)); }
+  model-viewer { width: 100%; height: min(62vh, 560px); min-height: 320px; display: block; background: transparent;
+                 --poster-color: transparent; }
+  .ar-btn { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); border: 0; border-radius: 999px;
+            background: var(--fg); color: var(--bg); font: 600 14px/1 var(--font-body); padding: 14px 22px;
+            display: inline-flex; gap: 10px; align-items: center; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+  :root .ar-btn { background: #1d1a17; color: #f6f3ee; } /* sits on the always-light wall */
+  .ar-btn svg { width: 18px; height: 18px; }
+  .hint { position: absolute; top: 12px; left: 12px; font-size: 12px; color: #3f3a34; background: rgba(255,255,255,.82);
+          padding: 6px 10px; border-radius: 999px; }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 22px;
+           display: grid; gap: 22px; }
+  .group { display: grid; gap: 10px; }
+  .group h2 { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0;
+              font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid var(--line); background: transparent; color: var(--fg); border-radius: 999px;
+          padding: 9px 16px; font: 500 14px/1 var(--font-body); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+  .swatch { display: inline-flex; align-items: center; gap: 8px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); flex: none; }
+  .chip:focus-visible, .ar-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .chip:hover { border-color: var(--accent); }
+
+  .spec { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0; font-size: 14px; }
+  .spec dt { color: var(--muted); }
+  .spec dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .note { font-size: 13px; color: var(--muted); margin: 0; max-width: 60ch; }
+
+  .gallery h2 { font-family: var(--font-display); font-weight: 400; font-size: 22px; margin: 0 0 12px; }
+  .shots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 700px) { .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .shots figure { margin: 0; display: grid; gap: 6px; }
+  .shots img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 4px; display: block; }
+  .shots figcaption { font-size: 12px; color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) { model-viewer { --progress-bar-height: 0; } }
+</style>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">Laser-cut steel wall art</p>
+    <h1>Bismillah wall piece</h1>
+    <p class="arabic" lang="ar" dir="rtl">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+  </header>
+
+  <section class="product">
+    <div class="stage">
+      <model-viewer id="mv" src="bismillah_120cm.glb" ios-src="bismillah_120cm.usdz"
+        alt="3D model of the Bismillah calligraphy wall piece in laser-cut steel"
+        camera-controls touch-action="pan-y" interaction-prompt="none"
+        camera-orbit="0deg 88deg auto" min-camera-orbit="-55deg 55deg auto" max-camera-orbit="55deg 115deg auto"
+        field-of-view="28deg" environment-image="neutral" tone-mapping="commerce" exposure="1.05" shadow-intensity="0"
+        ar ar-modes="webxr scene-viewer quick-look" ar-placement="wall" ar-scale="fixed">
+        <button slot="ar-button" class="ar-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3"/><rect x="7" y="9" width="10" height="6" rx="1"/>
+          </svg>
+          View on your wall
+        </button>
+      </model-viewer>
+      <span class="hint">Drag to turn · pinch to zoom</span>
+    </div>
+
+    <aside class="panel" aria-label="Choose size and finish">
+      <div class="group">
+        <h2 id="size-label">Width</h2>
+        <div class="chips" role="group" aria-labelledby="size-label" id="sizes">
+          <button class="chip" type="button" data-w="60" aria-pressed="false">60 cm</button>
+          <button class="chip" type="button" data-w="90" aria-pressed="false">90 cm</button>
+          <button class="chip" type="button" data-w="120" aria-pressed="true">120 cm</button>
+        </div>
+      </div>
+      <div class="group">
+        <h2 id="finish-label">Finish</h2>
+        <div class="chips" role="group" aria-labelledby="finish-label" id="finishes">
+          <button class="chip swatch" type="button" data-f="black" aria-pressed="true"><span class="dot" style="background:#111"></span>Matte black</button>
+          <button class="chip swatch" type="button" data-f="gold" aria-pressed="false"><span class="dot" style="background:#c9a05a"></span>Brushed gold</button>
+          <button class="chip swatch" type="button" data-f="silver" aria-pressed="false"><span class="dot" style="background:#c8c8c8"></span>Satin silver</button>
+          <button class="chip swatch" type="button" data-f="white" aria-pressed="false"><span class="dot" style="background:#f2efe9"></span>Gloss white</button>
+        </div>
+      </div>
+      <dl class="spec">
+        <dt>Size</dt><dd id="dims">120 × 22.5 cm</dd>
+        <dt>Material</dt><dd>3 mm laser-cut steel</dd>
+        <dt>Finish</dt><dd id="finish-name">Matte black powder-coat</dd>
+        <dt>Mounting</dt><dd>Stands 2 cm off the wall on hidden spacers</dd>
+      </dl>
+      <p class="note">On a phone, tap <strong>View on your wall</strong> and point the camera at a wall to see the piece there at its real size. Works in Chrome on Android and Safari on iPhone.</p>
+    </aside>
+  </section>
+
+  <section class="gallery" aria-label="Styled photos">
+    <h2>Styled in a room</h2>
+    <div class="shots">
+      <figure><img src="img/front_day.jpg" alt="The piece above an oak console in daylight" loading="lazy"><figcaption>Daylight, above a console</figcaption></figure>
+      <figure><img src="img/angle_day.jpg" alt="Angled view showing the piece standing off the wall" loading="lazy"><figcaption>Stands off the wall</figcaption></figure>
+      <figure><img src="img/front_night.jpg" alt="The piece under a warm wall light at night with long shadows" loading="lazy"><figcaption>Evening wall light</figcaption></figure>
+      <figure><img src="img/detail_night.jpg" alt="Close-up of the letters and their shadows" loading="lazy"><figcaption>Letter detail and shadow</figcaption></figure>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  const BASE_W = 120, BASE_H = 22.5;  // the model's real size in cm
+  const FINISHES = {
+    black:  { name: "Matte black powder-coat", color: [0.012, 0.012, 0.013, 1], metal: 0, rough: 0.7 },
+    gold:   { name: "Brushed gold (PVD)",      color: [0.72, 0.48, 0.17, 1],   metal: 1, rough: 0.28, exposure: 0.8 },
+    silver: { name: "Satin silver (PVD)",      color: [0.62, 0.63, 0.65, 1],   metal: 1, rough: 0.3,  exposure: 0.85 },
+    white:  { name: "Gloss white powder-coat", color: [0.86, 0.85, 0.82, 1],   metal: 0, rough: 0.3 },
+  };
+  const mv = document.getElementById("mv");
+  let finish = "black";
+
+  function press(groupId, btn) {
+    document.querySelectorAll(`#${groupId} .chip`).forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+  }
+  function applyFinish() {
+    const f = FINISHES[finish];
+    document.getElementById("finish-name").textContent = f.name;
+    // metals mirror the bright studio light and wash out on the pale wall; bring exposure down for them
+    mv.exposure = f.exposure ?? 1.05;
+    const m = mv.model?.materials?.[0];
+    if (!m) return;
+    m.pbrMetallicRoughness.setBaseColorFactor(f.color);
+    m.pbrMetallicRoughness.setMetallicFactor(f.metal);
+    m.pbrMetallicRoughness.setRoughnessFactor(f.rough);
+  }
+  function setWidth(w) {
+    const s = w / BASE_W;
+    mv.scale = `${s} ${s} ${s}`;
+    document.getElementById("dims").textContent = `${w} × ${(BASE_H * s).toFixed(1)} cm`;
+  }
+
+  document.getElementById("sizes").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    press("sizes", b); setWidth(Number(b.dataset.w));
+  });
+  document.getElementById("finishes").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    press("finishes", b); finish = b.dataset.f; applyFinish();
+  });
+  mv.addEventListener("load", applyFinish);
+</script>
