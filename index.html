@@ -171,8 +171,26 @@
   const AR_MODES = { scene: "scene-viewer", webxr: "webxr", quick: "quick-look" };
   if (AR_MODES[q.get("ar")]) mv.setAttribute("ar-modes", AR_MODES[q.get("ar")]);
   if (q.get("place") === "floor") mv.setAttribute("ar-placement", "floor");
-  mv.addEventListener("ar-status", (e) => console.log("ar-status", e.detail.status));
-  mv.addEventListener("ar-tracking", (e) => console.log("ar-tracking", e.detail.status));
+  // ?model=test swaps in Google's sample astronaut (known to work in AR) to tell a model problem from a phone problem
+  if (q.get("model") === "test") {
+    mv.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
+    mv.removeAttribute("ios-src");
+    mv.setAttribute("ar-placement", q.get("place") === "wall" ? "wall" : "floor");
+  }
+  // ?debug=1 shows AR status on the page, since a phone's console can't be read
+  if (q.get("debug") === "1") {
+    const box = document.createElement("p");
+    box.className = "note";
+    box.id = "ar-debug";
+    box.textContent = `AR check: modes=${mv.getAttribute("ar-modes")} place=${mv.getAttribute("ar-placement")} src=${mv.getAttribute("src") || "embedded"}`;
+    document.querySelector(".panel").append(box);
+    const log = (k, v) => { box.textContent += ` | ${k}: ${v}`; };
+    mv.addEventListener("load", () => log("loaded", "yes"));
+    mv.addEventListener("error", (e) => log("error", e.detail?.type || "?"));
+    mv.addEventListener("ar-status", (e) => log("ar", e.detail.status));
+    mv.addEventListener("ar-tracking", (e) => log("tracking", e.detail.status));
+    setTimeout(() => log("canAR", mv.canActivateAR), 1500);
+  }
   let finish = "black";
 
   function press(groupId, btn) {
