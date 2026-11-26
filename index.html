@@ -165,6 +165,14 @@
     white:  { name: "Gloss white powder-coat", color: [0.86, 0.85, 0.82, 1],   metal: 0, rough: 0.3 },
   };
   const mv = document.getElementById("mv");
+  // Test switches in the address (not shown to visitors): ?ar=scene|webxr|quick picks the AR engine, ?place=floor
+  // places on the floor instead of the wall. Used to narrow down AR problems on a given phone.
+  const q = new URLSearchParams(location.search);
+  const AR_MODES = { scene: "scene-viewer", webxr: "webxr", quick: "quick-look" };
+  if (AR_MODES[q.get("ar")]) mv.setAttribute("ar-modes", AR_MODES[q.get("ar")]);
+  if (q.get("place") === "floor") mv.setAttribute("ar-placement", "floor");
+  mv.addEventListener("ar-status", (e) => console.log("ar-status", e.detail.status));
+  mv.addEventListener("ar-tracking", (e) => console.log("ar-tracking", e.detail.status));
   let finish = "black";
 
   function press(groupId, btn) {
