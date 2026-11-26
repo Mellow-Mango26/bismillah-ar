@@ -173,7 +173,7 @@
   if (q.get("place") === "floor") mv.setAttribute("ar-placement", "floor");
   // ?model=test swaps in Google's sample astronaut (known to work in AR) to tell a model problem from a phone problem
   if (q.get("model") === "test") {
-    mv.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
+    mv.setAttribute("src", "https://modelviewer.dev/shared-assets/models/Astronaut.glb");
     mv.removeAttribute("ios-src");
     mv.setAttribute("ar-placement", q.get("place") === "wall" ? "wall" : "floor");
   }
@@ -182,7 +182,7 @@
     const box = document.createElement("p");
     box.className = "note";
     box.id = "ar-debug";
-    box.textContent = `AR check: modes=${mv.getAttribute("ar-modes")} place=${mv.getAttribute("ar-placement")} src=${mv.getAttribute("src") || "embedded"}`;
+    box.textContent = `AR check: modes=${mv.getAttribute("ar-modes")} place=${mv.getAttribute("ar-placement")} src=${mv.getAttribute("src")}`;
     document.querySelector(".panel").append(box);
     const log = (k, v) => { box.textContent += ` | ${k}: ${v}`; };
     mv.addEventListener("load", () => log("loaded", "yes"));
